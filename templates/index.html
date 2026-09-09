@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>2-Tier Application</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>2-Tier Application</h1>
+
+        <p class="subtitle">
+            Flask + MySQL
+        </p>
+
+        <form action="/add" method="POST">
+
+            <input
+                type="text"
+                name="name"
+                placeholder="Enter your name"
+                required
+            >
+
+            <textarea
+                name="message"
+                placeholder="Enter your message"
+                required
+            ></textarea>
+
+            <button type="submit">
+                Add Message
+            </button>
+
+        </form>
+
+        <h2>Messages</h2>
+
+        <div class="messages">
+
+            {% for message in messages %}
+
+            <div class="message">
+
+                <h3>{{ message[1] }}</h3>
+
+                <p>{{ message[2] }}</p>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</body>
+</html>
