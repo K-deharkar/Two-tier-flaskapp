@@ -1,15 +1,15 @@
 from flask import Flask, render_template, request, redirect
 import mysql.connector
-
+import os
 app = Flask(__name__)
 
 
 def get_db_connection():
     return mysql.connector.connect(
-        host="mysql-service",
-        user="root",
-        password="root",
-        database="twotierdb"
+        host=os.getenv("DB_HOST", "localhost"),
+        user=os.getenv("DB_USER", "root"),
+        password=os.getenv("DB_PASSWORD", "root"),
+        database=os.getenv("DB_NAME", "twotierdb")
     )
 
 
