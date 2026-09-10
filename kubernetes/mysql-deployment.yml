@@ -17,6 +17,16 @@ spec:
           image: mysql:8.0
           ports:
             - containerPort: 3306
+          volumeMounts:
+            - name: mysql-storage
+              mountPath: /var/lib/mysql
+
+            # making the table messages automatically in the database when the pod is recreated or restarted
+            - name: mysql-init
+              mountPath: /docker-entrypoint-initdb.d/init.sql
+              subPath: init.sql
+              readOnly: true
+
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
@@ -28,3 +38,15 @@ spec:
                 configMapKeyRef:
                   name: flask-config
                   key: MYSQL_DATABASE
+      volumes:
+        - name: mysql-storage
+          persistentVolumeClaim:
+            claimName: mysql-pvc
+
+        # making the table messages automatically in the database when the pod is recreated or restarted
+        - name: mysql-init
+          configMap:
+            name: flask-config
+            items:
+              - key: init.sql
+                path: init.sql
