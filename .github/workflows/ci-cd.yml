@@ -6,6 +6,7 @@ on:
       - master
 
 jobs:
+  # CI
   build-and-push:
     runs-on: self-hosted
 
@@ -26,3 +27,19 @@ jobs:
       - name: Push Docker image
         run: |
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/flaskapp:latest
+  
+  # CD
+  deploy:
+    needs: build-and-push
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f kubernetes/
+          kubectl rollout restart deployment/flask-app
+          kubectl rollout status deployment/flask-app
+    
